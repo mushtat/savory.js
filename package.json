@@ -1,0 +1,27 @@
+{
+  "name": "Savory.js",
+  "version": "0.0.1-b",
+  "author": "Dmitry Mushtat",
+  "description": "Lightweight & robust SPA javascript framework",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mushtat/savory.js"
+  },
+  "license" : "MIT",
+  "dependencies": {
+    "nanoajax": "latest",
+    "html5-history-api": "latest"
+  },
+  "devDependencies": {
+    "browserify": "latest",
+    "uglify-js": "latest"
+  },
+  "scripts": {
+    "build": "browserify src/savory.js | uglifyjs -c -max-line-len=100000  --preamble \"// Savory.js - https://github.com/mushtat/savory.js\" > savory.min.js "
+  },
+  "keywords": [
+    "spa",
+    "one page",
+    "ajax"
+  ]
+}
