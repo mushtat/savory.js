@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Savory.js - Request parameters and partial page loading</title>
+        <meta name="description" content="">
+        <!-- <meta name="viewport" content="width=device-width"> -->
+
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="wrapper">
+                <nav>
+                    <a href="index.html" title="Main page" id="logo">Savory.js <em><span class="version">version</span> 0.0.1-b</em></a>
+                    <a class="active" href="getStarted.html" title="Get started">Get started</a>
+                    <a class="download external" target="_blank" href="https://cdn.rawgit.com/mushtat/savory.js/master/savory.min.js" title="Downloads">Download</a>
+                    <a class="external" target="_blank" href="https://github.com/mushtat/savory.js" title="Savory github">Github</a>
+                </nav>
+            </div>
+        </header>
+        <div role="main" id="container">
+            <section class="wrapper content">
+                <h1>Request parameters and partial page loading</h1>
+                <p>To get a new page content Savory.js makes XHR request with two additional parameters:</p>
+                <ul>
+                    <li><b>savory=true</b> - it is used for server to recognize that the request was made by Savory framework</li>
+                    <li><b>ts={currentTimestamp}</b> - it is a timestamp param for browser to disable request caching</li>
+                </ul>
+                <p>These parameters will be added to existing url request parameters or directly to url in the moment the request is sending and does not modify link nodes href.</p>
+                <p>Both these params are optional and configurable:</p>
+                <pre>&lt;script type=&quot;text/javascript&quot;&gt;
+    window.savoryConfig = {
+        request : {
+            noCache : true, // disable request caching by passing timestamp param
+            requiredParam : true, // enable additional parameters passing
+            params : { // list of additional parameters, can be changed and extended
+                savory : true 
+            }
+        }
+    }
+&lt;/script&gt;</pre>
+                <h2>Partial loading</h2>
+                <p>When first page was loaded and Savory.js was initialized - there is no need to load full contents for other page requests.</p>
+                <p>Server can check if request come from Savory.js (by params checking) and answer only with raw data. In this case Savory automatically detect this kind of response, so there is nothing to set up in Savory. There is simple example of server response with minimal data for Savory to show:</p>
+                <pre>&lt;!--&lt;title&gt;Page title&lt;/title&gt;--&gt;
+&lt;div id=&quot;container&quot;&gt;
+    Page content
+&lt;/div&gt;
+&lt;div id=&quot;scripts&quot;&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        console.log('Sample script');
+    &lt;/script&gt;
+&lt;/div&gt;</pre>
+                <p>It is important to set wrapper for content with id defined in config. By default this id equal to "container". Here is config sample with main content wrapper id setted:</p>
+                <pre>&lt;script type=&quot;text/javascript&quot;&gt;
+    window.savoryConfig = {
+        container : 'container', // id of main container
+        scriptsContainer : 'scripts', // id of scripts container
+    }
+&lt;/script&gt;</pre>
+            </section>
+        </div>
+        <footer>
+            <div class="wrapper">
+                <span class="left"><span class="copyright">Copyright</span> 2013-2015 <span class="name">Dmitry Mushtat</span></span>
+                <span class="right" id="audio">
+                   <button class="button" id="audio-trigger">Play audio</button>
+                </span>
+                <span class="right">Savory.js</span>
+            </div>
+        </footer>
+        <div id="scripts">
+            
+            <script type="text/javascript">
+                window.savoryConfig = {
+                    callbacks : {
+                        onReady : function(Savory){
+                            Site.init();
+                        },
+                        onLoad : function(){
+                            Site.init();
+                        }
+                    }
+                }
+            </script>
+            <scriPt src="js/plugins.js"></script>
+            <script src="js/main.js"></script>
+            <script src="https://cdn.rawgit.com/mushtat/savory.js/master/savory.min.js"></script>
+        </div>
+    </body>
+</html>

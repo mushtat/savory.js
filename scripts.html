@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Savory.js - Scripts on page</title>
+        <meta name="description" content="">
+        <!-- <meta name="viewport" content="width=device-width"> -->
+
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="wrapper">
+                <nav>
+                    <a href="index.html" title="Main page" id="logo">Savory.js <em><span class="version">version</span> 0.0.1-b</em></a>
+                    <a class="active" href="getStarted.html" title="Get started">Get started</a>
+                    <a class="download external" target="_blank" href="https://cdn.rawgit.com/mushtat/savory.js/master/savory.min.js" title="Downloads">Download</a>
+                    <a class="external" target="_blank" href="https://github.com/mushtat/savory.js" title="Savory github">Github</a>
+                </nav>
+            </div>
+        </header>
+        <div role="main" id="container">
+            <section class="wrapper content">
+                <h1>Scripts loading and execution</h1>
+                <p>For correct scripts handling in Savory.js all scripts must be appended into the container with id "scripts" (on default). In the other case they will be not executed while loading with page content.</p>
+                <p>Every script in the scripts container is moved to a head element (in the other case script will not be executed) and automatically executed. On page change these scripts are removed. For placing and identification of scripts is used the ideology similar to require.js and own realizing.</p>
+                <p>Here is simple code of page for load with script:</p>
+                <pre>&lt;!--&lt;title&gt;Page title&lt;/title&gt;--&gt;
+&lt;div id=&quot;container&quot;&gt;
+    Page content
+&lt;/div&gt;
+&lt;div id=&quot;scripts&quot;&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        console.log('Sample script');
+    &lt;/script&gt;
+&lt;/div&gt;</pre>
+            <p>You can manually set id of script container node in savory config:</p>
+            <pre>&lt;script type=&quot;text/javascript&quot;&gt;
+    window.savoryConfig = {
+        container : 'container', // id of main container
+        scriptsContainer : 'scripts', // id of scripts container
+    }
+&lt;/script&gt;</pre>
+            </section>
+        </div>
+        <footer>
+            <div class="wrapper">
+                <span class="left"><span class="copyright">Copyright</span> 2013-2015 <span class="name">Dmitry Mushtat</span></span>
+                <span class="right" id="audio">
+                   <button class="button" id="audio-trigger">Play audio</button>
+                </span>
+                <span class="right">Savory.js</span>
+            </div>
+        </footer>
+        <div id="scripts">
+            
+            <script type="text/javascript">
+                window.savoryConfig = {
+                    callbacks : {
+                        onReady : function(Savory){
+                            Site.init();
+                        },
+                        onLoad : function(){
+                            Site.init();
+                        }
+                    }
+                }
+            </script>
+            <scriPt src="js/plugins.js"></script>
+            <script src="js/main.js"></script>
+            <script src="https://cdn.rawgit.com/mushtat/savory.js/master/savory.min.js"></script>
+        </div>
+    </body>
+</html>
