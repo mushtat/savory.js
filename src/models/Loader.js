@@ -182,7 +182,7 @@ Loader.prototype.onFrameLoad = function(frame, scripts){
         title : title,
         scripts : scripts
     });
-    Evented.one(this, 'frame.clear', function(){
+    Evented.on(this, 'frame.clear', function(){
         document.body.removeChild(frame);
     });
 };
@@ -197,6 +197,7 @@ Loader.prototype.normalizeHTML = function(html){
         getId = function(){
             return Math.random().toString(36).substring(7);
         };
+
     if (scripts) {
         var scriptsId = getId();
         html = html.split(scripts[0]);
