@@ -17,7 +17,8 @@
     "uglify-js": "latest"
   },
   "scripts": {
-    "build": "browserify src/savory.js | uglifyjs -c -max-line-len=100000  --preamble \"// Savory.js - https://github.com/mushtat/savory.js\" > savory.min.js "
+    "build": "browserify src/savory.js > savory.js",
+    "build-min": "browserify src/savory.js | uglifyjs -c -max-line-len=100000  --preamble \"// Savory.js - https://github.com/mushtat/savory.js\" > savory.min.js"
   },
   "keywords": [
     "spa",

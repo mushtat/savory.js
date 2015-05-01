@@ -8,7 +8,12 @@ var savoryConfig = {
     updateScrollPosition : true,
     links : {
         external : false,
-        identificatorClassName : 'external' //classname to identificate ignored link nodes
+        identificatorClassName : 'external', //classname to identificate ignored link nodes
+        nav : {
+            enabled : false,
+            list : ['nav'],
+            activeClassName : 'active'
+        }
     },
     error : {
         containerClassname : 'savory-error'

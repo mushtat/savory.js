@@ -29,8 +29,8 @@ Interface.prototype.onPageReady = function(data){
     savoryConfig.callbacks.onLoad();
 };
 
-Interface.prototype.onLinkClick = function(href){
-    this.onLocationChange(href);
+Interface.prototype.onLinkClick = function(data){
+    this.onLocationChange(data.href);
 };
 
 Interface.prototype.onLoad = function(responseData){
