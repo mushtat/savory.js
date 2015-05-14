@@ -35,7 +35,7 @@
         <div role="main" id="container">
             <section class="wrapper content">
                 <h1>Overview</h1>
-                <p>The framework includes the transparent transitions between pages for user. Web-site or application with Savory enabled actually is one html page with reloadable content and titles.  First of all Savory framework directs the users with the low and mediate html/css coding skills but who needs the whole page application advantage (such as background tasks or music player) without page reloading. For complex single-page applications, the author recommends to use highly specialized tools, like ember.js, angular.js, backbone, react or similar libs and frameworks. Savory.js is suitable for mobile application development with Apache Cordoba, PhoneGap, etc.</p>
+                <p>The framework includes the transparent ajax transitions between pages for user. Web-site or application with Savory enabled actually is one html page with reloadable content and titles.  First of all Savory framework directs the users with the low and mediate html/css coding skills but who needs the whole one page application advantage (such as background tasks or music player) without page reloading. For complex single-page applications, the author recommends to use highly specialized tools, like ember.js, angular.js, backbone, react or similar libs and frameworks. Savory.js is suitable for mobile application development with Apache Cordoba, PhoneGap, etc.</p>
                 <p><b>Important</b>: Savory.js's aim is to remove gap between a simple task and a complex solution. It is the simplest way to make your static site AJAX-based</p>
                 <p>Savory itself does not depend on the other libs (like jQuery or Zepto). The minified file contains the library <a href="https://github.com/yanatan16/nanoajax" title="An ajax library you need a microscope to see " class="external" target="_blank">nanoajax</a> to see it you need to use a microscope and <a href="https://github.com/devote/HTML5-History-API" title="HTML5 History API expansion for browsers not supporting pushState, replaceState" class="external" target="_blank">html5 histiory api expansion</a>.</p>
                 <p>For build there is <a href="http://browserify.org/" title="Browserify" class="external" title="Browserify project site" target="_blank">Browserify</a> used with few development dependencies. More info you can get on the <a href="building.html" title="Build Savory locally">building info page</a>.
@@ -85,7 +85,7 @@
                             Site.init();
                         },
                         onLoad : function(){
-                            Site.init();
+                            Site.onLoad();
                         }
                     }
                 }

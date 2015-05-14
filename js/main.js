@@ -85,7 +85,7 @@
 
                 for (var i = 0; i < preTags.length; i++) {
                     hljs.highlightBlock(preTags[i]);
-                };
+                }
             },
             appendStyle : function(href){
                 var ss = document.createElement('link');
@@ -98,6 +98,9 @@
         init : function(){
             this.audio.init();
             this.highlight.init();
+        },
+        onLoad : function(){
+            this.highlight.init();
         }
-    }
+    };
 }();
