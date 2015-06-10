@@ -8,42 +8,41 @@
         factory();
     }
 }(this, function () {
-    var Interface = require('./controllers/interface.js');
+    // load main controller
+    var Interface = require('./controllers/Interface.js');
 
-    function Savory(config){
+    /**
+     * Savory constructor
+     * @constructor
+     * @param {object} config - configuration object
+     */
+    function Savory(/*obj*/config){
+
+        // prevent reinitializing
         if (window._savory) {
             return false;
         }
+
         var self = this;
 
-        self.base = self.getBase();
         self.config = config || window.savoryConfig || {};
         self['interface'] = new Interface();
 
+        // exec onReady callback
         window.savoryConfig.callbacks.onReady(self);
+        // save itself data just in case
         window._savory = self;
         return self;
     }
 
-    Savory.prototype.getBase = function(){
-        var baseTag = document.querySelector('base'),
-            base = {
-                document : ''
-            };
-
-        if (!baseTag) {
-            base.document = document.location.origin;
-        } else {
-            base.document = baseTag.getAttribute('target');
-        }
-
-        return base;
-    };
-
+    // Expose Savory constructor
     window.Savory = Savory.bind(Savory);
+    
+    // Autoinit
     if (window.savoryConfig.autoInit) {
         window.savory = new Savory();
     }
+
     return Savory;
 }));
 
