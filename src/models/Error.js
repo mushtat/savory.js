@@ -15,7 +15,7 @@ SError.prototype.show = function(message){
     if (self.closeTimer) {
         clearTimeout(self.closeTimer);
     }
-    this.el.innerHTML = message || 'Error ocured. ¯\\_(ツ)_/¯';
+    this.el.innerHTML = message || 'Error occurred. ¯\\_(ツ)_/¯';
     this.el.setAttribute('style', 'position:fixed;z-index:999;left:0;top:0;padding:5px;background:#E44A4A;color:black;');
     self.closeTimer = setTimeout(function(){
         self.hide();
