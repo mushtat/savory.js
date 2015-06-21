@@ -1,5 +1,6 @@
 'use strict';
 
+var fs = require('fs');
 var browserify = require('browserify');
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
@@ -7,6 +8,11 @@ var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
+var zip = require('gulp-zip');
+var rename = require('gulp-rename');
+var del = require('del');
+
+var version = JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
 
 gulp.task('build', function () {
   // set up the browserify instance on a task basis
@@ -15,8 +21,16 @@ gulp.task('build', function () {
     debug: false
   });
 
+  // delete all files in build folder
+  del([
+    './build/*'
+  ]);
+
   return b.bundle()
     .pipe(source('savory.js'))
+    .pipe(rename(function (path) {
+      path.basename += '-'+version;
+    }))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
@@ -26,10 +40,17 @@ gulp.task('build', function () {
     .pipe(gulp.dest('./build/'));
 });
 
+// Pack files to archive
+gulp.task('zip', ['build'], function() {
+    return gulp.src('./build/*')
+      .pipe(zip('savory.zip'))
+      .pipe(gulp.dest('./build/'));
+});
+
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch(['src/*.js', 'src/config/*.js', 'src/models/*.js', 'src/controllers/*.js'], ['build']);
+    gulp.watch(['src/*.js', 'src/config/*.js', 'src/models/*.js', 'src/controllers/*.js'], ['zip']);
 });
 
 // Default Task
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['build', 'zip', 'watch']);
