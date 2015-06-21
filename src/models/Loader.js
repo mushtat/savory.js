@@ -14,6 +14,7 @@ var Evented = require('./Evented.js'),
 var Loader = function(){
     this._url = document.createElement('a'); // overflow for url parsing
     this.scripts = [];
+    this.currentFrameNode = null;
     this._scriptsProxy = document.createElement('div');
     Evented.on(this, 'page.load', this.onPageLoad.bind(this));
 };
@@ -145,7 +146,10 @@ Loader.prototype.parse = function(/*string*/html){
     frame.contentDocument.write(normalizedHTML.html);
     frame.contentDocument.close();
 
+    this.currentFrameNode = frame;
+
     Evented.one(this, 'frame.clear', function(){
+        this.currentFrameNode = null;
         document.body.removeChild(frame);
     });
 };
@@ -368,6 +372,21 @@ Loader.prototype.normalizeHTML = function(/*string*/html){
         html : html,
         scripts : scripts
     };
+};
+
+/**
+ * Remove all elements and events related to module
+ *
+ * @this Loader
+ * @method
+ */
+Loader.prototype.destroy = function(){
+    Evented.off(this, 'page.load');
+    Evented.off(this, 'frame.clear');
+
+    if (this.currentFrameNode && this.currentFrameNode.parentNode) {
+        this.currentFrameNode.parentNode.removeChild(this.currentFrameNode);        
+    }
 };
 
 module.exports = Loader;

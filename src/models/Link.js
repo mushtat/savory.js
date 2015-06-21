@@ -86,13 +86,26 @@ Link.prototype.check = function(/*DOMnode*/link){
             navClassName : navClassName
         });
 
-
         if (event) {
             event.preventDefault();
         }
 
         return event;
     }
+};
+
+/**
+ * Remove all elements and events related to module
+ *
+ * @this Link
+ * @method
+ */
+Link.prototype.destroy = function(link){
+    delete link._savory;
+    Evented.off(link, 'click');
+    Evented.on(link, 'click', function(){
+        return true;
+    });
 };
 
 module.exports = Link;

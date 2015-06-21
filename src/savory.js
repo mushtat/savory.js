@@ -20,27 +20,51 @@
 
         // prevent reinitializing
         if (window._savory) {
-            return false;
+            return window._savory;
         }
 
-        var self = this;
-
-        self.config = config || window.savoryConfig || {};
-        self['interface'] = new Interface();
+        this.config = config || window.savoryConfig || {};
+        this['interface'] = new Interface();
 
         // exec onReady callback
-        window.savoryConfig.callbacks.onReady(self);
+        window.savoryConfig.callbacks.onReady(this);
         // save itself data just in case
-        window._savory = self;
-        return self;
+        window._savory = this;
     }
+
+    /**
+     * Remove all elements and events related to module
+     *
+     * @this Savory
+     * @method
+     */
+    Savory.prototype.destroy = function(){
+
+        this['interface'].destroy();
+
+        delete window.savoryConfig;
+        delete window._savory;
+        if (window.savory) {
+            delete window.savory;
+        }
+    };
 
     // Expose Savory constructor
     window.Savory = Savory.bind(Savory);
     
     // Autoinit
     if (window.savoryConfig.autoInit) {
-        window.savory = new Savory();
+        // if Savory script tag inserted in head
+        if (!document.body) {
+            window.onload = function(){
+                if (window.onload && typeof window.onload === 'function') {
+                    window.onload();                    
+                }
+                window.savory = new Savory();
+            }
+        } else { // or in bottom of body
+            window.savory = new Savory();
+        }
     }
 
     return Savory;

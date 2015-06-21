@@ -142,4 +142,23 @@ Interface.prototype.onLocationChange = function(/*string || event*/href) {
     });
 };
 
+/**
+ * Remove all elements and events related to module
+ *
+ * @this Interface
+ * @method
+ */
+Interface.prototype.destroy = function() {
+    Evented.global.off('page.ready');
+    Evented.global.off('link.clicked');
+    Evented.global.off('page.load.success');
+    Evented.global.off('page.load.error');
+
+    Evented.off(window, 'popstate', this.onLocationChange.bind(this));
+
+    this._error.destroy();
+    this._loader.destroy();
+    this._parser.destroy();
+};
+
 module.exports = Interface;
