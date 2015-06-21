@@ -1,6 +1,8 @@
 'use strict';
+// Object with set of auxiliary methods
 var utils = {
-    merge : function(obj1, obj2) {
+    // Merge two objects 
+    merge : function(/*object*/obj1, /*object*/obj2) {
         for (var p in obj2) {
             try {
                 // Property in destination object set; update its value.
@@ -16,7 +18,8 @@ var utils = {
         }
         return obj1;
     },
-    forEach : function(array, callback) {
+    // forEach method for arrays that execute callback to each array item
+    forEach : function(/*array*/array, /*function*/callback) {
         if (typeof callback !== 'function') {
             return false;
         }
@@ -24,7 +27,8 @@ var utils = {
             callback(i, array[i]);
         }
     },
-    findComments : function(el){
+    // Find comment tags in passed dom node
+    findComments : function(/*DOMnode*/el){
         var arr = [];
         for(var i = 0; i < el.childNodes.length; i++) {
             var node = el.childNodes[i];

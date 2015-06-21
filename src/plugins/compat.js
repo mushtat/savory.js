@@ -1,4 +1,8 @@
 'use strict';
+
+// Compatibility functions
+// Contain classlist polyfill and bind polyfill
+
 module.exports = function() {
     //https://github.com/remy/polyfills/blob/master/classList.js
     (function () {
