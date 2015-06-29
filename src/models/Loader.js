@@ -13,7 +13,7 @@ var Evented = require('./Evented.js'),
  */
 var Loader = function(){
     this._url = document.createElement('a'); // overflow for url parsing
-    this.scripts = [];
+    this.scriptID = '';
     this.currentFrameNode = null;
     this._scriptsProxy = document.createElement('div');
     Evented.on(this, 'page.load', this.onPageLoad.bind(this));
@@ -214,19 +214,8 @@ Loader.prototype.onPageLoad = function(/*object*/data){
     parentContainer.outerHTML = data.container.outerHTML;
 
     // Delete all old scripts via classname
-    // Remove their classnames from classnames storage called 'this.scripts'
-    if (this.scripts.length > 0) {
+    deleteScripts();
 
-        for (var i = 0; i < this.scripts.length; i++) {
-
-            deleteScripts(this.scripts[i]);
-
-            if (this.scripts.length > 1) {
-                this.scripts.shift();
-            }
-
-        }
-    }
 
     // Add new scripts
     if (data.scripts) {
@@ -249,12 +238,10 @@ Loader.prototype.onPageLoad = function(/*object*/data){
     /**
      * Delete script tag from head if specified classname match
      *
-     * @param {string} classname - Classname of script tag to remove
-     *
      * @function
      */
-    function deleteScripts(/*string*/classname) {
-        var scriptsEl = document.querySelectorAll('.savory_'+classname);
+    function deleteScripts() {
+        var scriptsEl = document.querySelectorAll('.savory_script');
 
         if (scriptsEl && scriptsEl.length > 0) {
             for (var i = 0; i < scriptsEl.length; i++) {
@@ -280,8 +267,6 @@ Loader.prototype.onPageLoad = function(/*object*/data){
 
         var nodes,
             scriptTags,
-            inlineScripts = [],
-            externalScripts = [],
             scriptCount = 0;
 
         // Parse script string as html
@@ -299,7 +284,7 @@ Loader.prototype.onPageLoad = function(/*object*/data){
         }
 
         // Find newly appended scripts
-        scriptTags = document.head.querySelectorAll('.savory_'+this.scripts[0]);
+        scriptTags = document.head.querySelectorAll('.savory_'+this.scriptID);
 
         // Clone each new script tag
         for (var i = 0; i < scriptTags.length; i++) {
@@ -347,8 +332,9 @@ Loader.prototype.onPageLoad = function(/*object*/data){
                     }
                     waitForScripts();
                 } else {
-                    newScript.src = scriptTag.src || '';
                     newScript.onload = waitForScripts;
+                    newScript.src = scriptTag.src || '';
+                    document.head.appendChild(newScript);
                 }
             }
 
@@ -363,7 +349,6 @@ Loader.prototype.onPageLoad = function(/*object*/data){
             }
 
             // Remove old script and append new
-            document.head.appendChild(newScript);
             document.head.removeChild(scriptTag);
         }
     }    
@@ -401,9 +386,9 @@ Loader.prototype.normalizeHTML = function(/*string*/html){
         scripts = scripts.join('');
         scripts = scripts.split(template.end);
         scripts = scripts.join('');
-        scripts = scripts.replace(/<( .*|)script/gi, '<script class="savory_'+scriptsID+'" ');
+        scripts = scripts.replace(/<( .*|)script/gi, '<script class="savory_script savory_'+scriptsID+'" ');
 
-        this.scripts.push(scriptsID);
+        this.scriptID = scriptsID;
     }
 
     return {
