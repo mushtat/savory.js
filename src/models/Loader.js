@@ -208,8 +208,7 @@ Loader.prototype.onFrameLoad = function(/*DOMnode*/frame, /*string*/scripts){
  * @method
  */
 Loader.prototype.onPageLoad = function(/*object*/data){
-    var parentContainer = document.querySelector('#'+savoryConfig.container),
-        scriptsContainer = document.querySelector('#'+savoryConfig.scriptsContainer);
+    var parentContainer = document.querySelector('#'+savoryConfig.container);
 
     // Replace current container html with loaded container html    
     parentContainer.outerHTML = data.container.outerHTML;
@@ -230,7 +229,7 @@ Loader.prototype.onPageLoad = function(/*object*/data){
     }
 
     // Add new scripts
-    if (data.scripts && scriptsContainer) {
+    if (data.scripts) {
         addScripts.call(this, data.scripts);
     }
 

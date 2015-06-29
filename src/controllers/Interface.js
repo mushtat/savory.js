@@ -49,7 +49,7 @@ var Interface = function(){
      *
      * @param {string} path - Path of document to load
      * @param {object} options - Load method options
-     * @param {function} options.onSuccess - Function called when content is loaded and displayed but not parsed
+     * @param {function} options.onSuccess - Function called when content is loaded, displayed and parsed
      * @param {function} options.onError - Load method options
      *
      * @this Interface
@@ -67,7 +67,7 @@ var Interface = function(){
             preventDefault : false
         }, options);
 
-        Evented.global.one('page.load.success', options.onSuccess);
+        Evented.global.one('page.ready', options.onSuccess);
         Evented.global.one('page.load.error', options.onError);
 
         loader.load(path);
