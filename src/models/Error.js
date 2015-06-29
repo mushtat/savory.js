@@ -10,7 +10,7 @@ var savoryConfig = require('./../config/savory.js');
  * @constructor
  */
 var SError = function(){
-    this.closeTimer = false;
+    this.closeTimer = null;
 
     this.el = document.createElement('b');
     this.el.classList.add(savoryConfig.error.containerClassname);
@@ -49,6 +49,20 @@ SError.prototype.show = function(/*string*/message){
 SError.prototype.hide = function(){
     this.el.innerHTML = '';
     this.el.setAttribute('style', '');
+};
+
+/**
+ * Remove all elements and events related to module
+ *
+ * @this SError
+ * @method
+ */
+SError.prototype.destroy = function(){
+    if (this.closeTimer) {
+        clearTimeout(this.closeTimer);
+    }
+    delete this.closeTimer;
+    this.el.parentNode.removeChild(this.el);
 };
 
 module.exports = SError;

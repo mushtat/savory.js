@@ -18,17 +18,32 @@ var Parser = function(){};
  * @see models/Link
  */
 Parser.prototype.parse = function(){
-    var dom = {
+    this.dom = {
         links : new Link()
     };
 
     Evented.global.off('links.check');
 
     _.forEach(document.links, function(i, link){
-        dom.links.check(link);
-    });
+        this.dom.links.check(link);
+    }, this);
 
-    return dom;
+    return this.dom;
+};
+
+/**
+ * Remove all elements and events related to module
+ *
+ * @this Parser
+ * @method
+ */
+Parser.prototype.destroy = function() {
+
+    Evented.global.off('links.check');
+
+    _.forEach(document.links, function(i, link){
+        this.dom.links.destroy(link);
+    }, this);
 };
 
 module.exports = Parser;

@@ -6,7 +6,7 @@ var utils = {
         for (var p in obj2) {
             try {
                 // Property in destination object set; update its value.
-                if ( obj2[p].constructor==Object ) {
+                if ( obj2[p].constructor == Object ) {
                   obj1[p] = utils.merge(obj1[p], obj2[p]);
                 } else {
                   obj1[p] = obj2[p];
@@ -19,12 +19,12 @@ var utils = {
         return obj1;
     },
     // forEach method for arrays that execute callback to each array item
-    forEach : function(/*array*/array, /*function*/callback) {
+    forEach : function(/*array*/array, /*function*/callback, /*obj*/scope) {
         if (typeof callback !== 'function') {
             return false;
         }
         for (var i = 0; i < array.length; i++) {
-            callback(i, array[i]);
+            callback.call(scope, i, array[i]);
         }
     },
     // Find comment tags in passed dom node
