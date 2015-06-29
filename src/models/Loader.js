@@ -330,10 +330,9 @@ Loader.prototype.onPageLoad = function(/*object*/data){
 
 
             function waitForScripts(){
+                scriptCount++;
                 if (scriptCount === scriptTags.length) {
                     Evented.global.fire('page.scripts.loaded');
-                } else {
-                    scriptCount++;
                 }
             }
 

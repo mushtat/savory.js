@@ -64,11 +64,12 @@ var Interface = function(){
         options = _.merge({
             onSuccess : function(){},
             onError : function(){},
-            preventDefault : false
+            onScriptsLoaded : function(){}
         }, options);
 
         Evented.global.one('page.ready', options.onSuccess);
         Evented.global.one('page.load.error', options.onError);
+        Evented.global.one('page.scripts.loaded', options.onScriptsLoaded);
 
         loader.load(path);
     }
