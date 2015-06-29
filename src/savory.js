@@ -9,7 +9,8 @@
     }
 }(this, function () {
     // load main controller
-    var Interface = require('./controllers/Interface.js');
+    var Interface = require('./controllers/Interface.js'),
+        _ = require('./plugins/utils.js');
 
     /**
      * Savory constructor
@@ -23,8 +24,17 @@
             return window._savory;
         }
 
-        this.config = config || window.savoryConfig || {};
+        var config = config || {};
+
+        if (window.savoryConfig) {
+            config = _.merge(config, window.savoryConfig);
+        }
+
+        this.config = config;
         this['interface'] = new Interface();
+
+        // Exposing savory public interface
+        this.api = this['interface']['public'];
 
         // exec onReady callback
         window.savoryConfig.callbacks.onReady(this);
@@ -42,11 +52,14 @@
 
         this['interface'].destroy();
 
-        delete window.savoryConfig;
+        window._savory = null;
         delete window._savory;
         if (window.savory) {
+            window.savory = null;
             delete window.savory;
         }
+
+        return null;
     };
 
     // Expose Savory constructor

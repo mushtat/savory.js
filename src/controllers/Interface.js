@@ -3,7 +3,8 @@ var Parser = require('./../models/Parser.js'),
     Loader = require('./../models/Loader.js'),
     Evented = require('./../models/Evented.js'),
     SavoryError = require('./../models/Error.js'),
-    savoryConfig = require('./../config/savory.js');
+    savoryConfig = require('./../config/savory.js'),
+    _ = require('./../plugins/utils.js');
     require('html5-history-api');
     require('./../plugins/compat.js');
 
@@ -15,19 +16,23 @@ var Parser = require('./../models/Parser.js'),
  */
 var Interface = function(){
 
-    // Error module. Handle errors
-    // @see models/Error.js
-    this._error = new SavoryError();
-    
-    // Loader module. Load data with specified options
-    // @see models/Loader.js
-    this._loader = new Loader();
+        // Error module. Handle errors
+        // @see models/Error.js
+    var error = new SavoryError(),
+        // Loader module. Load data with specified options
+        // @see models/Loader.js
+        loader = new Loader(),
+        // Parser module. Parse loaded content
+        // @see models/Parser.js
+        parser = new Parser();
 
-    // Parser module. Parse loaded content
-    // @see models/Parser.js
-    this._parser = new Parser();
+    this._ = {
+        error : error,
+        loader : loader,
+        parser : parser,
+        location : window.history.location || window.location
+    };
 
-    this.location = window.history.location || window.location;
 
     Evented.global.on('page.ready', this.onPageReady.bind(this));
     Evented.global.on('link.clicked', this.onLinkClick.bind(this));
@@ -36,7 +41,42 @@ var Interface = function(){
 
     Evented.on(window, 'popstate', this.onLocationChange.bind(this));
 
-    this._loader.load();
+    this._.loader.load();
+
+    /**
+     * Load content from specified path
+     * Part of the Savory.js public interface
+     *
+     * @param {string} path - Path of document to load
+     * @param {object} options - Load method options
+     * @param {function} options.onSuccess - Function called when content is loaded and displayed but not parsed
+     * @param {function} options.onError - Load method options
+     *
+     * @this Interface
+     * @method
+     */
+    function load(/*string*/path, /*object*/options) {
+
+        if (!options || typeof options !== 'object') {
+            options = {};
+        }
+
+        options = _.merge({
+            onSuccess : function(){},
+            onError : function(){},
+            preventDefault : false
+        }, options);
+
+        Evented.global.one('page.load.success', options.onSuccess);
+        Evented.global.one('page.load.error', options.onError);
+
+        loader.load(path);
+    }
+
+    // Public interface
+    this['public'] = {
+        load : load.bind(this)
+    };
 };
 
 /**
@@ -52,7 +92,7 @@ var Interface = function(){
  */
 Interface.prototype.onPageReady = function(/*obj*/data){
 
-    this._parser.parse(data.container);
+    this._.parser.parse(data.container);
     savoryConfig.callbacks.onLoad();
 };
 
@@ -88,7 +128,7 @@ Interface.prototype.onLinkClick = function(/*obj*/data){
  */
 Interface.prototype.onLoad = function(/*obj*/responseData){
 
-    this._error.hide();
+    this._.error.hide();
 
     // responseData.silent is 'true' when user press "back" button in browser. We do not need to push this state again
     if (!responseData.silent) {
@@ -112,8 +152,8 @@ Interface.prototype.onLoad = function(/*obj*/responseData){
  */
 Interface.prototype.onError = function(/*obj*/responseData){
 
-    this._error.hide();
-    this._error.show('Error loading ' + responseData.path + ' Error code: ' + responseData.code);
+    this._.error.hide();
+    this._.error.show('Error loading ' + responseData.path + ' Error code: ' + responseData.code);
 };
 
 /**
@@ -137,7 +177,7 @@ Interface.prototype.onLocationChange = function(/*string || event*/href) {
         silent = true;
     }
 
-    this._loader.load(href, {
+    this._.loader.load(href, {
         silent : silent
     });
 };
@@ -156,9 +196,9 @@ Interface.prototype.destroy = function() {
 
     Evented.off(window, 'popstate', this.onLocationChange.bind(this));
 
-    this._error.destroy();
-    this._loader.destroy();
-    this._parser.destroy();
+    this._.error.destroy();
+    this._.loader.destroy();
+    this._.parser.destroy();
 };
 
 module.exports = Interface;
