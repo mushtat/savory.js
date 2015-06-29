@@ -49,8 +49,8 @@ gulp.task('zip', ['build'], function() {
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch(['src/*.js', 'src/config/*.js', 'src/models/*.js', 'src/controllers/*.js'], ['zip']);
+    gulp.watch(['src/*.js', 'src/config/*.js', 'src/models/*.js', 'src/controllers/*.js'], ['build', 'zip']);
 });
 
 // Default Task
-gulp.task('default', ['build', 'zip', 'watch']);
+gulp.task('default', ['build', 'zip']);
