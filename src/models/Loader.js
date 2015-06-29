@@ -231,6 +231,8 @@ Loader.prototype.onPageLoad = function(/*object*/data){
     // Add new scripts
     if (data.scripts) {
         addScripts.call(this, data.scripts);
+    } else {
+        Evented.global.fire('page.scripts.loaded');
     }
 
     // Scroll to top of the window
