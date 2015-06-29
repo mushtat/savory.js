@@ -280,6 +280,8 @@ Loader.prototype.onPageLoad = function(/*object*/data){
 
         var nodes,
             scriptTags,
+            inlineScripts = [],
+            externalScripts = [],
             scriptCount = 0;
 
         // Parse script string as html
@@ -301,7 +303,7 @@ Loader.prototype.onPageLoad = function(/*object*/data){
 
         // Clone each new script tag
         for (var i = 0; i < scriptTags.length; i++) {
-            cloneScript(scriptTags[i]);
+            cloneScript(scriptTags[i], scriptTags[i-1]);
         }
 
         /**
@@ -311,26 +313,50 @@ Loader.prototype.onPageLoad = function(/*object*/data){
          *
          * @function
          */
-        function cloneScript(/*DOMnode*/scriptTag){
+        function cloneScript(/*DOMnode*/scriptTag, /*DOMnode*/previousScript){
             var newScript = document.createElement('script'),
                 exec;
+
+            scriptTag.alias = newScript;
 
             newScript.id = scriptTag.id || '';
             newScript.className = scriptTag.className || '';
 
-            if (scriptTag.innerHTML.length > 0) {
-                // If script is inline - eval it's content
-                exec = new Function(scriptTag.innerHTML);
-                exec.call(window);
-                waitForScripts();
+            newScript._loaded = false;
+
+            if (previousScript) {
+                if (previousScript.alias._loaded === false) {
+                    Evented.one(previousScript.alias, 'load.complete', function(){
+                        executeScript();
+                    });
+                } else {
+                    executeScript();
+                }
             } else {
-                newScript.src = scriptTag.src || '';
-                newScript.onload = waitForScripts;
+                executeScript();
             }
 
+            function executeScript() {
+                if (scriptTag.innerHTML.length > 0) {
+                    // If script is inline - eval it's content
+                    try {
+                        exec = new Function(scriptTag.innerHTML);
+                        exec.call(window);
+                    } catch (e) {
+                        throw new Error(e,'Script executing error. Please, check your syntax');
+                    }
+                    waitForScripts();
+                } else {
+                    newScript.src = scriptTag.src || '';
+                    newScript.onload = waitForScripts;
+                }
+            }
 
             function waitForScripts(){
                 scriptCount++;
+                newScript._loaded = true;
+                Evented.fire(newScript, 'load.complete');
+
                 if (scriptCount === scriptTags.length) {
                     Evented.global.fire('page.scripts.loaded');
                 }
