@@ -194,7 +194,7 @@ Interface.prototype.destroy = function() {
     Evented.global.off('page.load.success');
     Evented.global.off('page.load.error');
 
-    Evented.off(window, 'popstate', this.onLocationChange.bind(this));
+    Evented.off(window, 'popstate');
 
     this._.error.destroy();
     this._.loader.destroy();
