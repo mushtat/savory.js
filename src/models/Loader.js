@@ -277,7 +277,8 @@ Loader.prototype.onPageLoad = function(/*object*/data){
     function addScripts(/*string*/scriptsHTML){
 
         var nodes,
-            scriptTags;
+            scriptTags,
+            scriptCount = 0;
 
         // Parse script string as html
         this._scriptsProxy.innerHTML = scriptsHTML;
@@ -319,8 +320,19 @@ Loader.prototype.onPageLoad = function(/*object*/data){
                 // If script is inline - eval it's content
                 exec = new Function(scriptTag.innerHTML);
                 exec.call(window);
+                waitForScripts();
             } else {
                 newScript.src = scriptTag.src || '';
+                newScript.onload = waitForScripts;
+            }
+
+
+            function waitForScripts(){
+                if (scriptCount === scriptTags.length) {
+                    Evented.global.fire('page.scripts.loaded');
+                } else {
+                    scriptCount++;
+                }
             }
 
             // Remove old script and append new
