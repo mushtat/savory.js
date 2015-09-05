@@ -54,9 +54,11 @@ gulp.task('watch', function() {
 });
 
 gulp.task('server', function(){
-    connect.server({
-      port : 8800
-    });
+    if (!process.env.TRAVIS) {
+      connect.server({
+        port : 8800
+      });
+    }
 });
 
 gulp.task('test', ['server'], function (done) {
@@ -66,7 +68,9 @@ gulp.task('test', ['server'], function (done) {
       configFile: __dirname + '/karma.conf.js',
       singleRun: true
     }, function(){
-      connect.serverClose();
+      if (!process.env.TRAVIS) {
+        connect.serverClose();        
+      }
       done();
     }).start();
 });
