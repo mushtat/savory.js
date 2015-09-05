@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8">
   <title>Savory.js Tests</title>
-  <link rel="stylesheet" href="../node_modules/mocha/mocha.css"/>
-  <link rel="stylesheet" href="./vendor/jquery-ui.css"/>
-  <script src="../node_modules/chai/chai.js"></script>
-  <script src="../node_modules/mocha/mocha.js"></script>
+  <link rel="stylesheet" href="http://localhost:8800/node_modules/mocha/mocha.css"/>
+  <link rel="stylesheet" href="http://localhost:8800/tests/vendor/jquery-ui.css"/>
+  <script src="http://localhost:8800/node_modules/chai/chai.js"></script>
+  <script src="http://localhost:8800/node_modules/mocha/mocha.js"></script>
 
-  <script src="../build/savory-0.0.1.js"></script>
+  <script src="http://localhost:8800/build/savory-0.0.1.js"></script>
 
   <script>mocha.setup('bdd');</script>
-  <script src="./tests.js"></script>
-  <script>
-    window.onload = function() {
-         mocha.run();
-    };
-  </script>
  </head>
 <body>
   <div id="mocha"></div>
   <div id="container"></div>
+  <script src="http://localhost:8800/tests/tests.js"></script>
+  <script>
+    window.onload = function() {
+        mocha.run();
+    };
+  </script>
 </body>
 </html>

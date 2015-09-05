@@ -62,7 +62,10 @@ SError.prototype.destroy = function(){
         clearTimeout(this.closeTimer);
     }
     delete this.closeTimer;
-    this.el.parentNode.removeChild(this.el);
+    
+    if (this.el.parentNode) {
+        this.el.parentNode.removeChild(this.el);        
+    }
 };
 
 module.exports = SError;

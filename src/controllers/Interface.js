@@ -93,7 +93,7 @@ var Interface = function(){
  */
 Interface.prototype.onPageReady = function(/*obj*/data){
 
-    this._.parser.parse(data.container);
+    this._.parser.parse();
     savoryConfig.callbacks.onLoad();
 };
 
@@ -152,6 +152,8 @@ Interface.prototype.onLoad = function(/*obj*/responseData){
  * @method
  */
 Interface.prototype.onError = function(/*obj*/responseData){
+
+    console.log(responseData);
 
     this._.error.hide();
     this._.error.show('Error loading ' + responseData.path + ' Error code: ' + responseData.code);

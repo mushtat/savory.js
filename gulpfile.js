@@ -11,6 +11,7 @@ var gutil = require('gulp-util');
 var zip = require('gulp-zip');
 var rename = require('gulp-rename');
 var del = require('del');
+var connect = require('gulp-connect');
 
 var version = JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
 
@@ -52,5 +53,27 @@ gulp.task('watch', function() {
     gulp.watch(['src/*.js', 'src/config/*.js', 'src/models/*.js', 'src/controllers/*.js'], ['build', 'zip']);
 });
 
+gulp.task('server', function(){
+    if (!process.env.TRAVIS) {
+      connect.server({
+        port : 8800
+      });
+    }
+});
+
+gulp.task('test', ['server'], function (done) {
+    var Server = require('karma').Server;
+
+    new Server({
+      configFile: __dirname + '/karma.conf.js',
+      singleRun: true
+    }, function(){
+      if (!process.env.TRAVIS) {
+        connect.serverClose();        
+      }
+      done();
+    }).start();
+});
+
 // Default Task
-gulp.task('default', ['build', 'zip']);
+gulp.task('default', ['build', 'test', 'zip']);

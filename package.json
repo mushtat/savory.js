@@ -1,34 +1,40 @@
 {
-  "name" : "Savory.js",
-  "version" : "0.0.1",
-  "author" : "Dmitry Mushtat",
-  "description" : "Lightweight & robust SPA javascript framework",
-  "repository" : {
-    "type" : "git",
-    "url" : "git://github.com/mushtat/savory.js"
+  "name": "Savory.js",
+  "version": "0.0.1",
+  "author": "Dmitry Mushtat",
+  "description": "Lightweight & robust SPA javascript framework",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mushtat/savory.js"
   },
-  "license" : "MIT",
-  "dependencies" : {
-    "nanoajax" : "latest",
-    "html5-history-api" : "latest",
-    "bean" : "latest"
+  "license": "MIT",
+  "dependencies": {
+    "nanoajax": "latest",
+    "html5-history-api": "latest",
+    "bean": "latest"
   },
-  "devDependencies" : {
-    "gulp" : "latest",
-    "browserify" : "latest",
-    "mocha" : "latest",
-    "chai" : "latest",
-    "vinyl-source-stream" : "latest",
-    "vinyl-buffer" : "latest",
-    "gulp-concat" : "latest",
-    "gulp-sourcemaps" : "latest",
-    "gulp-uglify" : "latest",
-    "gulp-util" : "latest",
-    "gulp-zip" : "latest",
-    "gulp-rename" : "latest",
-    "del" : "latest"
+  "devDependencies": {
+    "browserify": "latest",
+    "del": "latest",
+    "vinyl-buffer": "latest",
+    "vinyl-source-stream": "latest",
+    "gulp": "latest",
+    "gulp-concat": "latest",
+    "gulp-connect": "latest",
+    "gulp-rename": "latest",
+    "gulp-sourcemaps": "latest",
+    "gulp-uglify": "latest",
+    "gulp-util": "latest",
+    "gulp-zip": "latest",
+    "karma": "latest",
+    "chai": "latest",
+    "karma-chai": "^0.1.0",
+    "mocha": "latest",
+    "karma-mocha": "^0.2.0",
+    "karma-mocha-reporter": "latest",
+    "karma-chrome-launcher": "^0.2.0"
   },
-  "keywords" : [
+  "keywords": [
     "spa",
     "one page",
     "ajax"
