@@ -16,5 +16,6 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
-  - python -m SimpleHTTPServer 8800
-script: gulp
+  - nohup python -m SimpleHTTPServer 8800 &
+script: 
+  - gulp
