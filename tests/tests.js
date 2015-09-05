@@ -1,9 +1,21 @@
 'use strict';
 
 var expect = chai.expect,
-    contentPath = '/tests/content/';
+    contentPath = 'http://localhost:8800/tests/content/';
 
 describe('Savory.js', function() {
+
+  before(function() {
+
+    if (document.getElementById('container')) {
+      return;
+    }
+
+    // Append container element to test page directly
+    var container = document.createElement('div');
+    container.id = 'container';
+    document.body.appendChild(container);
+  });
 
   describe('Initialization', function() {
 
@@ -66,7 +78,7 @@ describe('Savory.js', function() {
         }, 
 
         onError : function(){
-          throw new Error('Loading error');
+          throw new Error('Loading error. Is CORS enabled?');
         }
 
       });
@@ -87,7 +99,7 @@ describe('Savory.js', function() {
         }, 
 
         onError : function(){
-        	throw new Error('Loading error');
+        	throw new Error('Loading error. Is CORS enabled?');
         }
 
       });

@@ -130,10 +130,15 @@ Loader.prototype.parse = function(/*string*/html){
     // Remove script tags from raw html string
     // Script will be moved to head for proper executing
     var normalizedHTML = this.normalizeHTML(html),
-        frame = document.createElement('iframe');
+        frame = document.createElement('iframe'),
+        frameDoc;
+
+    frame.src = 'about:blank';
 
     frame.style.display = 'none';
     document.body.appendChild(frame);
+
+    frameDoc = frame.contentDocument || frame.contentWindow.document;
 
     // Set private property to iframe window object to prevent Savory.js initializing in iframe 
     frame.contentWindow._savory = true;
@@ -142,9 +147,9 @@ Loader.prototype.parse = function(/*string*/html){
         this.onFrameLoad(frame, normalizedHTML.scripts);
     }).bind(this);
 
-    frame.contentDocument.open();
-    frame.contentDocument.write(normalizedHTML.html);
-    frame.contentDocument.close();
+    frameDoc.open('text/htmlreplace');
+    frameDoc.write(normalizedHTML.html);
+    frameDoc.close();
 
     this.currentFrameNode = frame;
 
@@ -210,8 +215,18 @@ Loader.prototype.onFrameLoad = function(/*DOMnode*/frame, /*string*/scripts){
 Loader.prototype.onPageLoad = function(/*object*/data){
     var parentContainer = document.querySelector('#'+savoryConfig.container);
 
-    // Replace current container html with loaded container html    
-    parentContainer.outerHTML = data.container.outerHTML;
+    if (!parentContainer) {
+        Evented.global.fire('page.load.error', {
+            code : 1,
+            path : ''
+        });
+        return false;
+    }
+
+    if (data.container) {
+        // Replace current container html with loaded container html    
+        parentContainer.outerHTML = data.container.outerHTML;
+    }
 
     // Delete all old scripts via classname
     deleteScripts();
