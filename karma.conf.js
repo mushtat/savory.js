@@ -2,7 +2,7 @@
 // Generated on Fri Sep 04 2015 10:49:11 GMT+0300 (Финляндия (лето))
 
 module.exports = function(config) {
-  config.set({
+  var configuration = {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -63,12 +63,22 @@ module.exports = function(config) {
     customLaunchers: {
       ChromeNoCORS: {
         base: 'Chrome',
-        flags: ['--disable-web-security']
+        flags: ['--no-sandbox', '--disable-web-security']
+      },
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox', '--disable-web-security']
       }
     },
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
-  });
+  };
+
+  if(process.env.TRAVIS){
+    configuration.browsers = ['Chrome_travis_ci'];
+  }
+
+  config.set(configuration);
 }
