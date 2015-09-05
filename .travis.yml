@@ -17,6 +17,4 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
   - python -m SimpleHTTPServer 8800
-  - sleep 3
-  - "node_modules/karma/bin/karma start karma.conf.js --single-run"
 script: gulp
